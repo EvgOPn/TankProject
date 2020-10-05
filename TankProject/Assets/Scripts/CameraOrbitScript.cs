@@ -10,8 +10,8 @@ public sealed class CameraOrbitScript : MonoBehaviour
 
 	private Vector3 _localRotation;
 
-	[SerializeField] private Transform _cameraTransform;
-	[SerializeField] private Transform _cameraPivot;
+	[SerializeField] private Transform _cameraTransform = null;
+	[SerializeField] private Transform _cameraPivot = null;
 	[SerializeField] private float _cameraDistance = 10f;
 	[SerializeField] private float _mouseSensitivity = 4f;
 	[SerializeField] private float _scrollSensitvity = 2f;
@@ -35,7 +35,7 @@ public sealed class CameraOrbitScript : MonoBehaviour
 
 	private void ClampYCameraRotation()
 	{
-		_localRotation.y = Mathf.Clamp(_localRotation.y, 5f, 50f);
+		_localRotation.y = Mathf.Clamp(_localRotation.y, -15f, 50f);
 	}
 
 	private void HandleZooming()
