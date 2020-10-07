@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BarrelCrosshairController : MonoBehaviour
+public sealed class BarrelCrosshairController : MonoBehaviour
 {
 	[SerializeField] private GameObject _barrelImageCrosshair = null;
 	[SerializeField] private Transform _barrelShootPointTransform = null;
@@ -32,6 +32,6 @@ public class BarrelCrosshairController : MonoBehaviour
 
 	private void DrawDebugRay()
 	{
-		Debug.DrawRay(_barrelRay.origin, _barrelRay.direction);
+		Debug.DrawRay(_barrelRay.origin, _barrelRay.direction * 200, Color.red);
 	}
 }

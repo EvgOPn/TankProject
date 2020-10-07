@@ -10,6 +10,7 @@ public sealed class CameraOrbitScript : MonoBehaviour
 
 	private Vector3 _localRotation;
 
+	[SerializeField] private Transform _cameraPlace = null;
 	[SerializeField] private Transform _cameraTransform = null;
 	[SerializeField] private Transform _cameraPivot = null;
 	[SerializeField] private float _cameraDistance = 10f;
@@ -60,6 +61,9 @@ public sealed class CameraOrbitScript : MonoBehaviour
 
 	private void UpdateCameraPosition()
 	{
+		_cameraPivot.position = _cameraPlace.position;
+		//_cameraPivot.rotation = _cameraPlace.rotation;
+
 		Quaternion targetRotation = Quaternion.Euler(_localRotation.y, _localRotation.x, 0);
 		_cameraPivot.rotation = Quaternion.Lerp(_cameraPivot.rotation, targetRotation, Time.deltaTime * _orbitDampening);
 

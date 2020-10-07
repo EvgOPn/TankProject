@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurretRotationScript : MonoBehaviour
+public sealed class TurretRotationScript : MonoBehaviour
 {
+	[SerializeField] private Transform _tankPosition = null;
 	[SerializeField] private Transform _cameraPivotTransform = null;
 	[SerializeField] private Transform _turretPivotTransform = null;
 
@@ -27,5 +28,6 @@ public class TurretRotationScript : MonoBehaviour
 	private void RotateTurret()
 	{
 		_turretPivotTransform.rotation = Quaternion.RotateTowards(_turretPivotTransform.rotation, _targetRotation, Time.deltaTime * _rotationDampening);
+		transform.position = _tankPosition.position;
 	}
 }

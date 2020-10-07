@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AngleClamp : MonoBehaviour
+public sealed class AngleClamp : MonoBehaviour
 {
 	public static float Clamp(float angle, float min, float max)
 	{

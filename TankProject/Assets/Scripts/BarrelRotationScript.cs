@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BarrelRotationScript : MonoBehaviour
+public sealed class BarrelRotationScript : MonoBehaviour
 {
 	[SerializeField] private Transform _barrelTransform = null;
 	[SerializeField] private GameObject _crosshairImageGO = null;
 
-	[SerializeField] private float _upBarrelAngle = -20f;
+	[SerializeField] private float _upBarrelAngle = -15f;
 	[SerializeField] private float _downBarrelAngle = 15f;
 	[SerializeField] private float _barrelRotateAngleFixer = 10f;
 
@@ -35,7 +35,7 @@ public class BarrelRotationScript : MonoBehaviour
 	private void FindBarrelRotationDirection()
 	{
 		_direction = (_rayToCrosshair.GetPoint(MAX_RAY_DISTANCE) - _barrelTransform.position).normalized;
-		_lookRotation = Quaternion.LookRotation(_direction);		
+		_lookRotation = Quaternion.LookRotation(_direction);
 	}
 
 	private void HandleBarrelRotation()
