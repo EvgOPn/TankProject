@@ -18,7 +18,13 @@ public sealed class CameraOrbitScript : MonoBehaviour
 	[SerializeField] private float _orbitDampening = 10f;
 	[SerializeField] private float _scrollDampening = 6f;
 
-	void Update()
+
+	private void Start()
+	{
+		Cursor.visible = false;
+	}
+
+	private void Update()
 	{
 		GetInput();
 		HandleZooming();
@@ -35,7 +41,7 @@ public sealed class CameraOrbitScript : MonoBehaviour
 
 	private void ClampYCameraRotation()
 	{
-		_localRotation.y = Mathf.Clamp(_localRotation.y, -10f, 50f);
+		_localRotation.y = Mathf.Clamp(_localRotation.y, -10f, 90f);
 	}
 
 	private void HandleZooming()
