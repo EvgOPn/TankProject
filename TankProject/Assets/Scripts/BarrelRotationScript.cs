@@ -11,13 +11,15 @@ public sealed class BarrelRotationScript : MonoBehaviour
 	[SerializeField] private float _upBarrelAngle = -15f;
 	[SerializeField] private float _downBarrelAngle = 15f;
 	[SerializeField] private float _barrelRotateAngleFixer = 10f;
+	[SerializeField] private float _barrelDampingTime = 4f;
 
 	private Quaternion _lookRotation;
 	private Vector3 _direction;
 	private Vector3 _crosshairScreenPoint;
 	private Ray _rayToCrosshair;
+	private RaycastHit _rayHitInfo;
 
-	private const float MAX_RAY_DISTANCE = 1000f;
+	private const float MAX_RAY_DISTANCE = 250f;
 
 	private void Update()
 	{
@@ -34,13 +36,22 @@ public sealed class BarrelRotationScript : MonoBehaviour
 
 	private void FindBarrelRotationDirection()
 	{
-		_direction = (_rayToCrosshair.GetPoint(MAX_RAY_DISTANCE) - _barrelTransform.position).normalized;
+		if (Physics.Raycast(_rayToCrosshair, out _rayHitInfo))
+		{
+			_direction = (_rayHitInfo.point - _barrelTransform.position).normalized;
+		}
+		else
+		{
+			_direction = (_rayToCrosshair.GetPoint(MAX_RAY_DISTANCE) - _barrelTransform.position).normalized;
+		}
+
 		_lookRotation = Quaternion.LookRotation(_direction);
 	}
 
 	private void HandleBarrelRotation()
 	{
 		float barrelRotAngle = _lookRotation.eulerAngles.x - _barrelRotateAngleFixer;
-		_barrelTransform.localEulerAngles = new Vector3(AngleClamp.Clamp(barrelRotAngle, _upBarrelAngle, _downBarrelAngle), 0f, 0f);
+		float newAngle = Mathf.LerpAngle(_barrelTransform.localEulerAngles.x, AngleClamp.Clamp(barrelRotAngle, _upBarrelAngle, _downBarrelAngle), _barrelDampingTime * Time.deltaTime);
+		_barrelTransform.localEulerAngles = new Vector3(newAngle, 0f, 0f);
 	}
 }

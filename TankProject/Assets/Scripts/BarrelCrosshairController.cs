@@ -7,10 +7,13 @@ public sealed class BarrelCrosshairController : MonoBehaviour
 	[SerializeField] private GameObject _barrelImageCrosshair = null;
 	[SerializeField] private Transform _barrelShootPointTransform = null;
 
+	[SerializeField] private float _radiusOfRayFromBarrel = 0.2f;
+
+	private RaycastHit _rayHitInfo;
 	private Ray _barrelRay;
 	private Vector3 _rayHitPoint;
 
-	private const float MAX_RAY_DISTANCE = 900f;
+	private const float MAX_RAY_DISTANCE = 150f;
 
 	private void Update()
 	{
@@ -21,8 +24,16 @@ public sealed class BarrelCrosshairController : MonoBehaviour
 
 	private void FindCrosshairPoint()
 	{
-		_barrelRay = new Ray(_barrelShootPointTransform.position, _barrelShootPointTransform.rotation * Vector3.forward);
-		_rayHitPoint = _barrelRay.GetPoint(MAX_RAY_DISTANCE);
+		_barrelRay = new Ray(_barrelShootPointTransform.position, _barrelShootPointTransform.forward);
+
+		if (Physics.SphereCast(_barrelRay, _radiusOfRayFromBarrel, out _rayHitInfo))
+		{
+			_rayHitPoint = _rayHitInfo.point;
+		}
+		else
+		{
+			_rayHitPoint = _barrelRay.GetPoint(MAX_RAY_DISTANCE);
+		}
 	}
 
 	private void UpdateCrosshairPositionOnCanvas()
