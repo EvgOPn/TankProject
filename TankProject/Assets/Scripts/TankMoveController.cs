@@ -1,9 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public sealed class TankMoveController : MonoBehaviour
 {
+	[SerializeField] private UnityEvent OnTankForwardMovement = null;
+	[SerializeField] private UnityEvent OnTankBackMovement = null;
+	[SerializeField] private UnityEvent OnTankStoped = null;
+
 	private const string HORIZONTAL = "Horizontal";
 	private const string VERTICAL = "Vertical";
 
@@ -27,6 +32,7 @@ public sealed class TankMoveController : MonoBehaviour
 		if (_tankRigidbody)
 		{
 			GetInput();
+			CallInputBasedMethods();
 			HandleMovement();
 			HandleRotation();
 		}
@@ -36,6 +42,22 @@ public sealed class TankMoveController : MonoBehaviour
 	{
 		_horizontalInput = Input.GetAxis(HORIZONTAL);
 		_verticalInput = Input.GetAxis(VERTICAL);
+	}
+
+	private void CallInputBasedMethods()
+	{
+		if (_verticalInput > 0)
+		{
+			OnTankForwardMovement?.Invoke();
+		}
+		else if (_verticalInput < 0)
+		{
+			OnTankBackMovement?.Invoke();
+		}
+		else if (_verticalInput == 0)
+		{
+			OnTankStoped?.Invoke();
+		}
 	}
 
 	private void HandleMovement()
