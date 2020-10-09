@@ -19,6 +19,20 @@ public sealed class CameraOrbitScript : MonoBehaviour
 	[SerializeField] private float _orbitDampening = 10f;
 	[SerializeField] private float _scrollDampening = 6f;
 
+	private float _minCamYRotateAngle = -10f;
+	private float _maxCamYRotateAngle = 90f;
+
+	private float _minZoomValue = 5f;
+	private float _maxZoomValue = 15f;
+
+	private float _tempMinZoomValue;
+	private float _tempMaxZoomValue;
+
+	private float _tempMinCamYRotateAngle;
+	private float _tempMaxCamYRotateAngle;
+
+	private bool _thirdCamIsEnabled = true;
+
 
 	private void Start()
 	{
@@ -27,9 +41,47 @@ public sealed class CameraOrbitScript : MonoBehaviour
 
 	private void Update()
 	{
+		CheckZoomState();
 		GetInput();
 		HandleZooming();
 		UpdateCameraPosition();
+	}
+
+	private void CheckZoomState()
+	{
+		if (Input.GetKeyDown(KeyCode.LeftShift))
+		{
+			if (_thirdCamIsEnabled)
+			{
+				DisableThirdCamView();
+			}
+			else if (!_thirdCamIsEnabled)
+			{
+				EnableThirdCamView();
+			}
+		}
+	}
+
+	private void DisableThirdCamView()
+	{
+		_thirdCamIsEnabled = false;
+		_tempMaxZoomValue = _maxZoomValue;
+		_tempMinZoomValue = _minZoomValue;
+		_tempMaxCamYRotateAngle = _maxCamYRotateAngle;
+		_tempMinCamYRotateAngle = _minCamYRotateAngle;
+		_maxZoomValue = 0f;
+		_minZoomValue = 0f;
+		_maxCamYRotateAngle = 10f;
+		_minCamYRotateAngle = -10f;
+	}
+
+	private void EnableThirdCamView()
+	{
+		_thirdCamIsEnabled = true;
+		_maxZoomValue = _tempMaxZoomValue;
+		_minZoomValue = _tempMinZoomValue;
+		_maxCamYRotateAngle = _tempMaxCamYRotateAngle;
+		_minCamYRotateAngle = _tempMinCamYRotateAngle;
 	}
 
 	private void GetInput()
@@ -42,7 +94,7 @@ public sealed class CameraOrbitScript : MonoBehaviour
 
 	private void ClampYCameraRotation()
 	{
-		_localRotation.y = Mathf.Clamp(_localRotation.y, -10f, 90f);
+		_localRotation.y = Mathf.Clamp(_localRotation.y, _minCamYRotateAngle, _maxCamYRotateAngle);
 	}
 
 	private void HandleZooming()
@@ -56,7 +108,7 @@ public sealed class CameraOrbitScript : MonoBehaviour
 
 	private void ClampZooming()
 	{
-		_cameraDistance = Mathf.Clamp(_cameraDistance, 5f, 15f);
+		_cameraDistance = Mathf.Clamp(_cameraDistance, _minZoomValue, _maxZoomValue);
 	}
 
 	private void UpdateCameraPosition()
