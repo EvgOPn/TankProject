@@ -21,11 +21,34 @@ public sealed class BarrelRotationScript : MonoBehaviour
 
 	private const float MAX_RAY_DISTANCE = 250f;
 
+	private bool _isRotating = true;
+
 	private void Update()
 	{
-		CastRayToCrosshair();
-		FindBarrelRotationDirection();
-		HandleBarrelRotation();
+		CheckRotatingState();
+
+		if (_isRotating)
+		{
+			CastRayToCrosshair();
+			FindBarrelRotationDirection();
+			HandleBarrelRotation();
+		}
+	}
+
+	private void CheckRotatingState()
+	{
+		if (Input.GetMouseButton(1))
+		{
+			_isRotating = false;
+		}
+		else if (Input.GetMouseButtonUp(1))
+		{
+			_isRotating = true;
+		}
+		else
+		{
+			_isRotating = true;
+		}
 	}
 
 	private void CastRayToCrosshair()

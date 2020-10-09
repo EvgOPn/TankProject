@@ -15,11 +15,15 @@ public sealed class TankTrackMoveScript : MonoBehaviour
 	private Material _leftTrackMaterial;
 
 	private float _trackOffsetDirection = -1;
+	private float _startTime;
+	private float _offsetDuration = 20f;
 
 	private void Start()
 	{
 		_rightTrackMaterial = _rightTrackMeshRenderer.material;
 		_leftTrackMaterial = _leftTrackMeshRenderer.material;
+
+		_startTime = Time.time;
 	}
 
 	private void Update()
@@ -29,9 +33,12 @@ public sealed class TankTrackMoveScript : MonoBehaviour
 
 	private void SetTrackTexturesOffset()
 	{
+		float smoothTime = (Time.time - _startTime) / _offsetDuration;
 		float offset = Time.time * _trackOffsetSpeed * _trackOffsetDirection;
-		_rightTrackMaterial.SetTextureOffset(MAIN_TEXTURE, new Vector2(offset, 0));
-		_leftTrackMaterial.SetTextureOffset(MAIN_TEXTURE, new Vector2(offset, 0));
+		offset = Mathf.SmoothStep(_rightTrackMaterial.GetTextureOffset(MAIN_TEXTURE).x, offset, smoothTime);
+
+		_rightTrackMaterial.SetTextureOffset(MAIN_TEXTURE, new Vector2(offset, 0f));
+		_leftTrackMaterial.SetTextureOffset(MAIN_TEXTURE, new Vector2(offset, 0f));
 	}
 
 	public void TrackMoveForwardOffset()

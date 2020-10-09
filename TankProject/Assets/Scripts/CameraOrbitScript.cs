@@ -62,7 +62,6 @@ public sealed class CameraOrbitScript : MonoBehaviour
 	private void UpdateCameraPosition()
 	{
 		_cameraPivot.position = _cameraPlace.position;
-		//_cameraPivot.rotation = _cameraPlace.rotation;
 
 		Quaternion targetRotation = Quaternion.Euler(_localRotation.y, _localRotation.x, 0);
 		_cameraPivot.rotation = Quaternion.Lerp(_cameraPivot.rotation, targetRotation, Time.deltaTime * _orbitDampening);
